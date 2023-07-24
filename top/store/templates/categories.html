@@ -1,0 +1,16 @@
+{% load static from static %}
+<aside class="menu has-background-info-light p-3"
+        style="min-height: 100%; border-radius: 10px;">
+<div class="title">
+    Категории
+</div>
+<ul class="menu-list">
+    {% for category in categories %}
+    <li>
+        <a href="{% url 'store:home' %}?category={{category.pk}}">
+            {{category}}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+</aside>

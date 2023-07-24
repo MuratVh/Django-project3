@@ -1,0 +1,47 @@
+{% extends 'base_layout.html' %}
+{% load static from static %}
+
+{% block auth %}
+<div class="columns is-centered mt-3">
+    <div class="column is-4">
+        <div class="box has-background-info-light">
+            <form method="post">
+                <div class="title is-2 has-text-centered">
+                    Регистрация
+                </div>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="field">
+                    <label for="{{ field.id_for_label}}" class="label">
+                        {{field.label}}
+                    </label>
+                    <div class="control">
+                        {{field}}
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% if form.errors %}
+                <ul>
+                    {% for error in form.errors.values %}
+                    <li class="has-text-danger">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="has-text-centered">
+                    <button class="button is-success">
+                        Отправить
+                    </button>
+                </div>
+                <div class="content mt-4">
+                    <span>Уже есть аккаунт?</span>
+                    <br><br>
+                    <a href="{% url 'users:sign_in' %}">
+                        авторизоваться
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

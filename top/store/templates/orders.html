@@ -1,0 +1,41 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-10 box">
+                <table class="table is-striped is-fullwidth">
+                    <thead>
+                        <tr>
+                            <td>Номер заказа</td>
+                            <td>Идентификатор</td>
+                            <td>Продукты</td>
+                            <td>Итого</td>
+                            <td>Статус</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>№{{order.pk}}</td>
+                                <td></td>
+                                <td>
+                                    <!--  -->
+                                    {{order.order_products_list}}
+                                </td>
+                                <td>
+                                    {{order.total_price}}
+                                </td>
+                                <td>
+                                    <span class="tag is-medium is-warning">Принят</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

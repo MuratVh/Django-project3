@@ -1,0 +1,91 @@
+{% extends 'base_layout.html' %}
+{% load category %}
+{% load static %}
+
+{% block slider %}
+<div class="container-slide">
+    <div id="carousel-demo" class="carousel">
+        {% for slide in slides %}
+        <div class="item-1">
+            <img src="{{ slide.image.url }}" alt="" class="slide-img">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="columns mt-2">
+    <div class="column is-one-fifth">
+        {% categories %}
+    </div>
+    <div class="column">
+        <div class="columns is-multiline is-centered">
+            {% for product in products %}
+            <div class="column is-4">
+                <div class="card" style="min-height: 620px">
+                    <div class="card-image">
+                        <a href="{% url 'store:product' product.pk %}">
+                            <figure class="image">
+                                <img src="{{ product.image.url }}" alt="">
+                            </figure>
+                        </a>
+                        <!-- {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="">
+                        {%else%}
+                        <img src="{% static 'uploads/default-product-image.png '%}" alt="">
+                        {%endif%} -->
+                        
+                        {% if product.is_new %}
+                        <span class="tag is-danger">
+                            Новинка
+                        </span>
+                        {% endif %}
+
+                        {% if product.is_discounted %}
+                        <span class="tag is-primary">
+                            Скидка
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <br>
+                            <div class="media-content">
+                                <div class="title is-4">{{ product }}</div>
+                            </div>
+                        </div>
+                        <div class="columns is-vcenetered">
+                            <div class="column">
+                                <div class="content has-text-weight-bold">
+                                    {{ product.price }} рублей
+                                </div>
+                            </div>
+                            <div class="column has-text-right">
+                                <a href="{% url 'store:guest_register' product.pk %}">
+                                    <ion-icon name="cart-outline" class="order"></ion-icon>
+                                </a>
+                            </div>
+                            {% if user.is_authenticated %}
+                            <div class="column is-2">
+                                {% if user in product.favorite.all %}
+                                    <a href="{% url 'store:home' %}?action=favorite&product={{product.pk}}">
+                                        <ion-icon name="heart-outline" class="order"></ion-icon>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'store:home' %}?action=favorite&product={{product.pk}}">
+                                        <ion-icon name="heart" class="order has-text-danger"></ion-icon>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base_layout.html' %}
+
+{% block auth %}
+<div class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-4">
+                <div class="box has-background-info-light">
+                    <form method="post">
+                        <div class="title is-4">Редактирование профиля</div>
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="field">
+                            <label class="label" for="{{field.id_for_label}}">
+                                {{ field.label }}
+                            </label>
+                            <div class="control">
+                                {{field}}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <button class="button is-dark">Изменить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

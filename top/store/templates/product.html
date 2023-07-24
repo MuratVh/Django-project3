@@ -1,0 +1,140 @@
+{% extends 'base_layout.html' %}
+
+{%block content %}
+<section class="section product-detail">
+    <div class="columns">
+        <div class="column">
+            <div class="box">
+                <figure class="image">
+                    <img src="{{ product.image.url }}" alt="">
+                </figure>
+            </div>
+        </div>
+        <div class="column is-flex is-flex-direction-column is-justify-content-space-evenly">
+            <div>
+                <div class="title">
+                    {{product.name}}
+                    {% if product.is_new %}
+                    <span class="tag is-danger">Новинка!</span>
+                    {% endif %}
+                    {% if product.is_discounted %}
+                    <span class="tag is-primary">Скидка!</span>
+                    {% endif %}
+                </div>
+                <div class="subtitle is-flex mt-4">
+                    <span>0 отзывов</span>
+                    <span class="is-size-4 mx-3">
+                        <a href="#">
+                            <ion-icon name="logo-whatsapp" class="order"></ion-icon>
+                        </a>
+                        <a href="#">
+                            <ion-icon name="logo-youtube" class="order"></ion-icon>
+                        </a>
+                        <a href="#">
+                            <ion-icon name="logo-github" class="order"></ion-icon>
+                        </a>
+                    </span>
+                </div>
+            </div>
+            <div class="columns is-vcentered">
+                <div class="column is-7">
+                    <div class="message">
+                        <div class="message-body">
+                            <div class="title is-2 is-spaced">Характеристики</div>
+                            {{ product.description }}
+                        </div>
+                    </div>
+                </div>
+                <div class="column has-text-centered">
+                    <div class="message">
+                        <div class="message-body">
+                            <div class="title">
+                                {{product.price}} рублей
+                            </div>
+                            <div class="buttons">
+                                <a href="{% url 'store:guest_register' product.pk %}" class="button is-small is-outlined is-dark">
+                                    <ion-icon name="cart" class="mr-1"></ion-icon>
+                                </a>
+                                {% if user.is_authenticated %}
+                                    {% if user in product.favorite.all %}
+                                    <a href="{% url 'store:product' product.pk %}?action=favorite" class="button is-small">
+                                        <ion-icon name="heart-outline"></ion-icon>
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'store:product' product.pk %}?action=favorite" class="button is-small">
+                                        <ion-icon name="heart" class="has-text-danger"></ion-icon>
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+
+            {% if field.name == 'rating' %}
+            <div class="field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        {{field}}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="field">
+                <label for="{{field.id_for_label}}" class="label"> 
+                    {{field.label}}
+                </label>
+                <div class="control">
+                    {{field}}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% if form.errors %}
+            <ul>
+                {% for error in form.errors.values %}
+                <li class="has-text-danger">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <button class="button is-success">
+                Отправить
+            </button>
+        </form>
+    </div>
+    {% if reviews %}
+    <div class="title">Отзывы других покупателей</div>
+    {% else %}
+    <div class="title">Пока нет отзывов</div>
+    {% endif %}
+    <div class="columns is-multiline">
+        {% for review in reviews %}
+        <div class="column is-128x128">
+            <div class="box">
+                <div class="title has-text-black is-5">
+                    {{ review.customer.first_name }}
+                    <br>
+                    <div class="has-text-grey is-size-6">
+                        {{ review.customer }}
+                    </div>
+                </div>
+                <span>
+                    {{ review.rating }}/5
+                    <ion-icon name="star-outline" class="is-size-7"></ion-icon>
+                </span>
+                <span class="has-text-grey-light ml-3">{{ review.date }}</span>
+                <div class="mt-4">{{ review.text }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
